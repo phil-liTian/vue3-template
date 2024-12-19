@@ -12,6 +12,9 @@
   "description": "",
   "dependencies": {
     "unbuild": "^3.0.1",
-    "@phil/utils": "workspace:*"
+    "@phil/utils": "workspace:*",
+    "ant-design-vue": "~4.2.6",
+    "@ant-design/icons-vue": "^7.0.1",
+    "vue": "^3.5.13"
   }
 }

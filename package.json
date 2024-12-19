@@ -16,7 +16,7 @@
     "@phil/utils": "workspace:*",
     "@phil/vite-config": "workspace:*",
     "@vitejs/plugin-vue-jsx": "^4.1.1",
-    "ant-design-vue": "4.x",
+    "ant-design-vue": "~4.2.6",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "eslint": "^9.17.0",

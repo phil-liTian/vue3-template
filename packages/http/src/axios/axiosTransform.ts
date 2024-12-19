@@ -18,7 +18,7 @@ export abstract class AxiosTransform {
 	/**
 	 * @description: 请求之后处理response
 	 */
-	transformResonseHook?: (
+	transformResponseHook?: (
 		res: AxiosResponse<any>,
 		options: RequestOptions
 	) => any

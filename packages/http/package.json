@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@phil/types": "workspace:*",
+    "@phil/design": "workspace:*",
     "lodash-es": "^4.17.21",
     "unbuild": "^3.0.1"
   }

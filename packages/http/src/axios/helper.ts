@@ -1,7 +1,7 @@
 import { Recordable } from '@phil/types'
-import { isObject, isObjectLike, isString } from '@phil/utils'
+import { isObject, isString } from '@phil/utils'
 
-const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
+export const DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss'
 
 export function joinTimestamp(join: boolean, restful = false): string | object {
 	if (!join) {

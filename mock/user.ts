@@ -9,7 +9,18 @@ export default (config?: MockConfig) => {
 				return {
 					code: 200,
 					message: 'success',
-					data: { a: 21, 'import.meta.url': import.meta.url },
+					result: { a: 21, 'import.meta.url': import.meta.url },
+				}
+			},
+		},
+		{
+			url: '/api/getUserListFail',
+			method: 'get',
+			response: ({ body, query }) => {
+				return {
+					code: 403,
+					message: '请求超时',
+					result: { a: 21, 'import.meta.url': import.meta.url },
 				}
 			},
 		},
@@ -20,8 +31,16 @@ export default (config?: MockConfig) => {
 				return {
 					code: 200,
 					message: 'success',
-					data: { a: 21, 'import.meta.url': import.meta.url },
+					result: { a: 21, 'import.meta.url': import.meta.url },
 				}
+			},
+		},
+
+		{
+			url: '/api/error',
+			method: 'get',
+			response: ({ body, query }) => {
+				return ''
 			},
 		},
 	]

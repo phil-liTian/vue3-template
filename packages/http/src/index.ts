@@ -1,13 +1,18 @@
-import { isString } from '@phil/utils'
+import { isString, deepMerge, isFunction } from '@phil/utils'
 import PAxios from './axios/Axios'
+import type { AxiosInstance } from 'axios'
 import { AxiosTransform, CreateAxiosOptions } from './axios/axiosTransform'
 import { Recordable } from '@phil/types'
+import { useMessage } from '@phil/design'
+import { ContentTypeEnum, ResultEnum } from './types/axios'
 import {
+	DATE_TIME_FORMAT,
 	formatRequestDate,
 	joinTimestamp,
 	setObjToUrlParams,
 } from './axios/helper'
 
+const { createMessage, createSuccessModal, createErrorModal } = useMessage()
 const transform: AxiosTransform = {
 	/**
 	 * @description 请求hook
@@ -16,7 +21,7 @@ const transform: AxiosTransform = {
 		const {
 			apiUrl,
 			joinTime = true,
-			joinParamsToUrl = false,
+			joinParamsToUrl,
 			formatDate = true,
 			FORMAT_DATE = 'YYYY-MM-DD',
 		} = options
@@ -81,6 +86,75 @@ const transform: AxiosTransform = {
 	},
 
 	/**
+	 * @description 响应hook
+	 */
+	transformResponseHook(res, options) {
+		const {
+			isReturnNativeResponse,
+			isTransformResponse,
+			successMessageMode,
+			errorMessageMode,
+			errorCallBack,
+		} = options
+
+		if (isReturnNativeResponse) {
+			return res
+		}
+
+		if (!isTransformResponse) {
+			return res.data
+		}
+		const { data } = res
+		if (!data) {
+			throw new Error('请求失败')
+		}
+		const { code, message, result } = data
+
+		const hasSuccess =
+			data && Reflect.has(data, 'code') && code === ResultEnum.SUCCESS
+
+		if (hasSuccess) {
+			// 成功
+			let successMsg = message || '操作成功'
+
+			if (successMessageMode === 'message') {
+				createMessage.success(successMsg)
+			} else if (successMessageMode === 'modal') {
+				createSuccessModal({
+					title: '温馨提示',
+					content: successMsg,
+				})
+			}
+
+			return result
+		}
+
+		let errorMsg: string
+		// 请求失败 分几种情况
+		switch (code) {
+			case ResultEnum.TIMEOUT:
+				// 超时，登出
+				errorMsg = '接口请求超时,请刷新页面重试!'
+				break
+			default:
+				errorMsg = message || '请求失败'
+		}
+
+		if (errorMessageMode === 'message') {
+			createMessage.error(errorMsg)
+		} else if (errorMessageMode === 'modal') {
+			createErrorModal({ title: '错误提示', content: errorMsg })
+		}
+
+		// 根据业务场景使用
+		if (errorCallBack && isFunction(errorCallBack)) {
+			errorCallBack(res)
+		}
+
+		return res
+	},
+
+	/**
 	 * @description 拦截器的处理
 	 */
 	requestInterceptors: (config, options: CreateAxiosOptions) => {
@@ -105,21 +179,41 @@ const transform: AxiosTransform = {
 		return res
 	},
 
-	responseInterceptorsCatch(e, options) {
-		return Promise.reject(e)
+	/**
+	 * @description 响应的错误处理
+	 */
+	responseInterceptorsCatch(axiosInstance: AxiosInstance, error: any) {
+		console.log('axiosInstance', axiosInstance, error)
+
+		return Promise.reject(error)
 	},
 }
 
-const createAxios = (opt: Partial<CreateAxiosOptions> = {}) => {
-	return new PAxios({
-		transform,
-		requestOptions: {
-			withToken: true,
-			authenticationScheme: 'Bearer',
-			token: '123',
-		},
-		...opt,
-	})
+export const createAxios = (opt: Partial<CreateAxiosOptions> = {}) => {
+	return new PAxios(
+		deepMerge(
+			{
+				timeout: 1000 * 30,
+				baseURL: '',
+				headers: { 'Content-Type': ContentTypeEnum.JSON },
+				transform,
+				requestOptions: {
+					withToken: true,
+					authenticationScheme: 'Bearer',
+					token: '123',
+					joinParamsToUrl: false,
+					joinTime: true,
+					isReturnNativeResponse: false,
+					isTransformResponse: true,
+					successMessageMode: 'none',
+					errorMessageMode: 'none',
+					formatDate: true,
+					FORMAT_DATE: DATE_TIME_FORMAT,
+				},
+			},
+			opt
+		)
+	)
 }
 
 export const defHttp = createAxios()
