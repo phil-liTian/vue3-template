@@ -1,0 +1,16 @@
+{
+  "semi": false,
+  "singleQuote": true,
+  "arrowParens": "always",
+  "tabWidth": 2,
+  "printWidth": 80,
+  "useTabs": true,
+  "overrides": [
+    {
+      "files": ["*.vue", "*.tsx"],
+      "options": {
+        "vueIndentScriptAndStyle": true
+      }
+    }
+  ]
+}
