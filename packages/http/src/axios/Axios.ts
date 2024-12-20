@@ -7,6 +7,7 @@ import axios, {
 import { cloneDeep } from 'lodash-es'
 import { isFunction } from '@phil/utils'
 import { CreateAxiosOptions } from './axiosTransform'
+import { AxiosCanceler } from './axiosCancel'
 import {
 	ContentTypeEnum,
 	RequestOptions,
@@ -48,10 +49,19 @@ class PAxios {
 			responseInterceptors,
 			responseInterceptorsCatch,
 		} = transform
+		const axiosCanceler = new AxiosCanceler()
 
 		// 请求拦截器
 		this.axiosInstance.interceptors.request.use(
 			(config: InternalAxiosRequestConfig) => {
+				const requestOptions =
+					(config as unknown as any).requestOptions ??
+					this.options.requestOptions
+				// 忽略重复请求
+				const ignoreCancelToken = requestOptions?.ignoreCancelToken ?? true
+
+				!ignoreCancelToken && axiosCanceler.addPending(config)
+
 				if (requestInterceptors && isFunction(requestInterceptors)) {
 					config = requestInterceptors(config, this.options)
 				}
@@ -65,6 +75,7 @@ class PAxios {
 		// 响应拦截器
 		this.axiosInstance.interceptors.response.use(
 			(res: AxiosResponse) => {
+				res && axiosCanceler.removePending(res.config)
 				if (responseInterceptors && isFunction(responseInterceptors)) {
 					res = responseInterceptors(res)
 				}

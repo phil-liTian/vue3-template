@@ -27,11 +27,15 @@ export default (config?: MockConfig) => {
 		{
 			url: '/api/login',
 			method: 'post',
-			response: ({ body, query }) => {
+			response: async ({ body, query }) => {
 				return {
 					code: 200,
 					message: 'success',
-					result: { a: 21, 'import.meta.url': import.meta.url },
+					result: {
+						a: 21,
+						'import.meta.url': import.meta.url,
+						time: Date.now(),
+					},
 				}
 			},
 		},
@@ -40,7 +44,7 @@ export default (config?: MockConfig) => {
 			url: '/api/error',
 			method: 'get',
 			response: ({ body, query }) => {
-				return ''
+				return {}
 			},
 		},
 	]

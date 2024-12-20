@@ -66,9 +66,25 @@ export interface RequestOptions {
 	errorMessageMode?: ErrorMessageMode
 
 	/**
-	 * 请求失败是否弹出对话框, 这个对话框用使用者自定义
+	 * 请求重试机制
+	 */
+	retryRequest?: RetryRequest
+
+	/**
+	 * 请求失败回调：例如是否弹出对话框, 这个对话框用使用者自定义
 	 */
 	errorCallBack?: (error: any) => void
+
+	/**
+	 * 是否忽略取消重复请求
+	 */
+	ignoreCancelToken: boolean
+}
+
+export interface RetryRequest {
+	isOpenRetry: boolean
+	count: number
+	waitTime: number
 }
 
 export interface Result<T = any> {

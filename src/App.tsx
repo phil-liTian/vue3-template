@@ -6,12 +6,15 @@ export default defineComponent({
   name: 'App',
   setup() {
     // getUserList()
-    // const a = async () => {
-    //   const res = await login({ name: '123', password: undefined, date: dayjs() })
-    //   console.log('res', res);
-    // }
+    const a = async () => {
+      const res = await login({ name: '123', password: undefined, date: dayjs() })
+      console.log('res', res);
+    }
 
-    // a()
+
+    for (let i = 0; i < 3; i++) {
+      a()
+    }
 
     // getUserListFail()
 
@@ -19,7 +22,7 @@ export default defineComponent({
 
 
     return () => {
-      return <p-modal />
+      // return <p-modal />
     }
   }
 })

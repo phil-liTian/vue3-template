@@ -1,16 +1,19 @@
 import { isString, deepMerge, isFunction } from '@phil/utils'
+import { AxiosRetry } from './axios/axiosRetry'
 import PAxios from './axios/Axios'
 import type { AxiosInstance } from 'axios'
 import { AxiosTransform, CreateAxiosOptions } from './axios/axiosTransform'
 import { Recordable } from '@phil/types'
 import { useMessage } from '@phil/design'
-import { ContentTypeEnum, ResultEnum } from './types/axios'
+import { ContentTypeEnum, ResultEnum, RequestOptions } from './types/axios'
 import {
 	DATE_TIME_FORMAT,
 	formatRequestDate,
 	joinTimestamp,
 	setObjToUrlParams,
 } from './axios/helper'
+import axios from 'axios'
+import { AxiosCanceler } from './axios/axiosCancel'
 
 const { createMessage, createSuccessModal, createErrorModal } = useMessage()
 const transform: AxiosTransform = {
@@ -180,10 +183,46 @@ const transform: AxiosTransform = {
 	},
 
 	/**
-	 * @description 响应的错误处理
+	 * @description 响应的错误处理, 处理http请求非200的情况
 	 */
 	responseInterceptorsCatch(axiosInstance: AxiosInstance, error: any) {
-		console.log('axiosInstance', axiosInstance, error)
+		const { response, code, message, config } = error || {}
+		const err: string = error?.toString?.() ?? ''
+		const { errorCallBack } = config?.requestOptions
+		let errMessage = ''
+		const errorMessageMode = config?.requestOptions?.errorMessageMode || 'none'
+		if (axios.isCancel(error)) {
+			return Promise.reject(error)
+		}
+
+		try {
+			if (code === 'ECONNABORTED' && message.indexOf('timeout') !== -1) {
+				errMessage = '请求超时'
+			}
+			if (err?.includes('Network Error')) {
+				errMessage = '网络错误'
+			}
+
+			if (errorMessageMode === 'message') {
+				createMessage.error(errMessage)
+			} else if (errorMessageMode === 'modal') {
+				createErrorModal({ title: '服务器错误', content: errMessage })
+			}
+		} catch (error) {
+			throw new Error(error as unknown as string)
+		}
+
+		// 根据业务场景使用
+		if (errorCallBack && isFunction(errorCallBack)) {
+			errorCallBack(error)
+		}
+
+		// 添加重试机制
+		const { isOpenRetry } = config.requestOptions.retryRequest
+		const retryRequest = new AxiosRetry()
+		config.method?.toUpperCase() === 'GET' &&
+			isOpenRetry &&
+			retryRequest.retry(axiosInstance, error)
 
 		return Promise.reject(error)
 	},
@@ -209,6 +248,14 @@ export const createAxios = (opt: Partial<CreateAxiosOptions> = {}) => {
 					errorMessageMode: 'none',
 					formatDate: true,
 					FORMAT_DATE: DATE_TIME_FORMAT,
+					// 忽略重复请求
+					ignoreCancelToken: true,
+					// 延时重试机制
+					retryRequest: {
+						isOpenRetry: false,
+						count: 5,
+						waitTime: 1000,
+					},
 				},
 			},
 			opt
@@ -217,3 +264,5 @@ export const createAxios = (opt: Partial<CreateAxiosOptions> = {}) => {
 }
 
 export const defHttp = createAxios()
+
+export { AxiosCanceler, type RequestOptions }
