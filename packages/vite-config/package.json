@@ -21,7 +21,9 @@
   "dependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "@vitejs/plugin-vue-jsx": "^4.1.1",
+    "dayjs": "^1.11.13",
     "unbuild": "^3.0.1",
+    "unocss": "^0.65.2",
     "vite": "^6.0.3",
     "vite-plugin-mock": "^3.0.2"
   }

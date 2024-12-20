@@ -1,11 +1,13 @@
 import type { MockConfig } from 'vite-plugin-mock'
 
 export default (config?: MockConfig) => {
+
 	return [
 		{
 			url: '/api/getUserList',
 			method: 'get',
-			response: ({ body, query }) => {
+			response: () => {
+				config?.command
 				return {
 					code: 200,
 					message: 'success',
@@ -16,7 +18,7 @@ export default (config?: MockConfig) => {
 		{
 			url: '/api/getUserListFail',
 			method: 'get',
-			response: ({ body, query }) => {
+			response: () => {
 				return {
 					code: 403,
 					message: '请求超时',
@@ -27,7 +29,7 @@ export default (config?: MockConfig) => {
 		{
 			url: '/api/login',
 			method: 'post',
-			response: async ({ body, query }) => {
+			response: async () => {
 				return {
 					code: 200,
 					message: 'success',
@@ -43,7 +45,7 @@ export default (config?: MockConfig) => {
 		{
 			url: '/api/error',
 			method: 'get',
-			response: ({ body, query }) => {
+			response: () => {
 				return {}
 			},
 		},

@@ -4,14 +4,17 @@
 import { defineComponent } from "vue";
 import { Tooltip } from 'ant-design-vue'
 import { InfoCircleOutlined } from '@ant-design/icons-vue'
+import { useDesign } from "../../hooks/useDesign";
+import { getSlot } from "../../helpers/tsxHelper";
 
 
 export default defineComponent({
-  name: 'BasicHelp',
+  name: 'PBasicHelp',
 
   setup(props, { slots }) {
-    return () => <Tooltip>
-      <span> <InfoCircleOutlined />    </span>
+    const { prefixCls } = useDesign('basic-help')
+    return () => <Tooltip title='sada'>
+      <span class={prefixCls}> {getSlot(slots) || <InfoCircleOutlined /> } </span>
     </Tooltip>
   }
 })

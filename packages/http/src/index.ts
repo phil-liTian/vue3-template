@@ -174,7 +174,7 @@ const transform: AxiosTransform = {
 		return config
 	},
 
-	requestCatchHook(e, options) {
+	requestCatchHook(e) {
 		return Promise.reject(e)
 	},
 
@@ -186,7 +186,7 @@ const transform: AxiosTransform = {
 	 * @description 响应的错误处理, 处理http请求非200的情况
 	 */
 	responseInterceptorsCatch(axiosInstance: AxiosInstance, error: any) {
-		const { response, code, message, config } = error || {}
+		const { code, message, config } = error || {}
 		const err: string = error?.toString?.() ?? ''
 		const { errorCallBack } = config?.requestOptions
 		let errMessage = ''

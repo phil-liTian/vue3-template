@@ -83,7 +83,8 @@ export default tseslint.config(
       '.idea/',
       'explorations/',
       'dts-build/packages',
-      'eslint.config.js'
+      'eslint.config.js',
+      'mock/'
     ],
   }
 );

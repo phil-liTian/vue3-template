@@ -78,7 +78,7 @@ export interface RequestOptions {
 	/**
 	 * 是否忽略取消重复请求
 	 */
-	ignoreCancelToken: boolean
+	ignoreCancelToken?: boolean
 }
 
 export interface RetryRequest {

@@ -2,7 +2,7 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "ModalWrapper",
-  render() {
+  setup() {
     return () => <div>ModalWrapper</div>
   }
 }) 

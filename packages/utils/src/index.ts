@@ -2,6 +2,9 @@ import { App, Component } from 'vue'
 import { intersectionWith, isEqual, mergeWith, unionWith } from 'lodash-es'
 import { isArray, isObject } from './is'
 export * from './is'
+export * from './log'
+export * from './uuid'
+export * from './omit'
 
 type EventShim = {
 	new (...args: any[]): {

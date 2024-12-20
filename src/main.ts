@@ -1,21 +1,21 @@
 import { createApp } from 'vue'
-import './style.css'
+import './design/index.less'
+import { setupProdMockServer } from './setupProdMockServer'
 import PhilDesign from '@phil/design'
+import 'uno.css'
 import App from './App'
-import { createProdMockServer } from 'vite-plugin-mock/client'
-import userMockFn from '../mock/user'
+import './style.less'
 
-export async function setupProdMockServer() {
-  console.log('a------>', ...userMockFn())
-  
-	const mockModules = [...userMockFn()]
-	createProdMockServer(mockModules)
+
+function bootstrap() {
+	const app = createApp(App)
+	app.use(PhilDesign)
+
+	app.mount('#app')
 }
 
+if ( process.env.NODE_ENV === 'development' ) {
+	setupProdMockServer()
+}
 
-const app = createApp(App)
-app.use(PhilDesign)
-
-app.mount('#app')
-
-setupProdMockServer()
+bootstrap()
