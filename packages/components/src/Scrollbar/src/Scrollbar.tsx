@@ -12,8 +12,6 @@ export default defineComponent({
     scrollHeight: NumberType(0)
   },
   setup(props, { slots }) {
-    console.log('props.scrollHeight', props.scrollHeight);
-    
     const { native } = props
     const sizeWidth = ref('0');
     const sizeHeight = ref('0');
@@ -22,8 +20,6 @@ export default defineComponent({
     const wrap = ref();
 
     const update = () => {
-      console.log('update');
-      
       if (!unref(wrap)) return;
       const heightPercentage = (unref(wrap).clientHeight * 100) / unref(wrap).scrollHeight;
       const widthPercentage = (unref(wrap).clientWidth * 100) / unref(wrap).scrollWidth;
@@ -44,8 +40,6 @@ export default defineComponent({
     })
 
     watch(() => props.scrollHeight, (val) => {
-      console.log('val', val);
-      
       if ( native ) return
       update()
     }, { immediate: true })

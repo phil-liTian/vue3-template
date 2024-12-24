@@ -7,10 +7,12 @@
 
 <script lang="ts" setup>
 	import { ref } from 'vue';
+	import Input from './input.vue';
 	import Modal from './modal.vue'
-	const options = ['Modal', 'Form', 'Table']
-	const showComponent = ref('Modal');
+	const options = ['Input', 'Modal', 'Form', 'Table']
+	const showComponent = ref('Input');
 	const componentMap = {
+		Input,
 		Modal,
 	}
 </script>

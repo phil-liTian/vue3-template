@@ -62,7 +62,6 @@ export function hasClass(el: Element, cls: string) {
 	}
 }
 
-
 export function addClass(el: Element, cls: string) {
 	if (!el) return
 	let curClass = el.className
