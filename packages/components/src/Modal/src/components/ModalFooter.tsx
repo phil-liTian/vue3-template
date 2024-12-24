@@ -20,9 +20,18 @@ export default defineComponent({
 
     return () => <div>
       {slots.insertFooter && slots.insertFooter()}
-      {showCancelBtn && <p-button onClick={handleCancel} {...cancelButtonProps}>{cancelText}</p-button>}
+      {showCancelBtn &&
+        <p-button
+          onClick={handleCancel}
+          {...cancelButtonProps}>
+          {cancelText}
+        </p-button>
+      }
       {slots.centerFooter && slots.centerFooter()}
-      {showOkBtn && <p-button {...showOkButtonProps.value}>{okText}</p-button>}
+      {showOkBtn &&
+        <p-button {...showOkButtonProps.value}>
+          {okText}
+        </p-button>}
       {slots.appendFooter && slots.appendFooter()}
     </div>
   }

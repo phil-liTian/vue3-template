@@ -3,7 +3,7 @@ import UnoCSS from 'unocss/vite'
 export const commonConfig = (mode: string) => ({
 	server: {
 		host: true,
-		open: false,
+		open: true,
 	},
 
 	esbuild: {

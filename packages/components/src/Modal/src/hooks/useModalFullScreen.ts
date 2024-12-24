@@ -1,9 +1,9 @@
 import { computed, Ref, ref, unref } from 'vue'
 
 export interface UseFullScreenContext {
-	wrapClassName: Ref<string | undefined>
-	modalWrapperRef: Ref<any>
-	extHeightRef: Ref<number>
+	wrapClassName?: Ref<string | undefined>
+	modalWrapperRef?: Ref<any>
+	extHeightRef?: Ref<number>
 }
 
 export function useFullScreen(context: UseFullScreenContext) {

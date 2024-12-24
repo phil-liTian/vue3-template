@@ -9,7 +9,7 @@ export const modalProps = {
 	height: { type: Number },
 	minHeight: { type: Number },
 	// open drag
-	draggable: { type: Boolean, default: true },
+	draggable: { type: Boolean, default: false },
 	centered: { type: Boolean },
 	cancelText: { type: String, default: '取消' },
 	okText: { type: String, default: '确认' },
@@ -59,6 +59,7 @@ export const basicProps = Object.assign({}, modalProps, {
 	mask: { type: Boolean, default: true },
 
 	maskClosable: { type: Boolean, default: true },
+
 	keyboard: { type: Boolean, default: true },
 
 	maskStyle: Object as PropType<CSSProperties>,

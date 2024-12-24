@@ -5,6 +5,8 @@ export * from './is'
 export * from './log'
 export * from './uuid'
 export * from './omit'
+export * from './classNames'
+export * from './domUtil'
 
 type EventShim = {
 	new (...args: any[]): {
@@ -71,4 +73,9 @@ export function deepMerge<
 		}
 		return undefined
 	})
+}
+
+
+export function extend<T extends object, K extends object>(to: T, _from: K): T & K {
+	return Object.assign(to, _from)
 }
